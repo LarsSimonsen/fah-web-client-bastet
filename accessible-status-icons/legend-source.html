@@ -1,0 +1,53 @@
+<!doctype html><meta charset=utf-8>
+<link rel=stylesheet href="css/font-awesome.min.css">
+<style>
+html,body{margin:0;background:#e7e7e7}
+body{font:15px/1.2 "Segoe UI",Raleway,sans-serif;color:#333;padding:16px;display:inline-block}
+table{border-collapse:collapse;background:#fff}
+th,td{padding:7px 14px;text-align:center}
+th{font-weight:600;background:#f4f4f4}
+th.group{background:#e2e2e2;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+td.state{text-align:left;white-space:nowrap}
+tbody tr:nth-child(even){background:#f7f7f7}
+tr.sep td{background:#e7e7e7;padding:2px}
+.ic{font-size:20px;width:1.6em;display:inline-block}
+.gray .ic{filter:grayscale(1)}
+td.before{border-left:3px solid #e7e7e7}
+td.after{border-left:3px solid #e7e7e7}
+.run{color:green}.finish{color:#00cc99}.pause{color:orange}.wait{color:#b51100}.credited{color:gold}
+.fa.wait-badge{position:relative}
+.fa.wait-badge::after{content:'\f017';position:absolute;right:-0.55em;bottom:-0.35em;font-size:0.6em}
+td.changed{background:#fff6d6!important}
+</style>
+<table>
+<thead>
+<tr><th rowspan=2>State</th><th colspan=2 class=group>Before</th><th colspan=2 class=group>After</th></tr>
+<tr><th>Colour</th><th>Greyscale</th><th>Colour</th><th>Greyscale</th></tr>
+</thead>
+<tbody id=rows></tbody>
+</table>
+<script>
+// [label, cls, beforeIcon, afterIcon]
+const R=[
+ ['Downloading','','download','download'],
+ ['Running','run','refresh','refresh'],
+ ['Finishing','finish','refresh','flag-checkered'],
+ ['Uploading','','upload','upload'],
+ ['Paused','pause','hourglass-o','hourglass-o'],
+ ['Dumped','','trash','trash'],
+ null,
+ ['Assign Wait','wait','clock-o','clock-o'],
+ ['Download Wait','wait','clock-o','cloud-download wait-badge'],
+ ['Core Wait','wait','clock-o','cogs wait-badge'],
+ ['Run Wait','wait','clock-o','refresh wait-badge'],
+ ['Upload Wait','wait','clock-o','cloud-upload wait-badge'],
+ ['Dump Wait','wait','clock-o','trash-o wait-badge'],
+];
+const ic=(i,c)=>`<span class="ic ${c}"><span class="fa fa-${i}"></span></span>`;
+rows.innerHTML=R.map(r=>{
+ if(!r) return '<tr class=sep><td colspan=5></td></tr>';
+ const [t,c,b,a]=r, ch=a!==b?' changed':'';
+ return `<tr><td class=state>${t}</td>
+  <td class=before>${ic(b,c)}</td><td class="gray">${ic(b,c)}</td>
+  <td class="after${ch}">${ic(a,c)}</td><td class="gray${ch}">${ic(a,c)}</td></tr>`}).join('');
+</script>
